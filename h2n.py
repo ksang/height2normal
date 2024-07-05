@@ -6,7 +6,7 @@ class HeightToNormal(nn.Module):
     def __init__(
             self,
             filter_type = "sobel",
-            blur = GaussianBlur(kernel_size=(5, 5), sigma=(0.1, 5)),
+            blur = GaussianBlur(kernel_size=(3, 3), sigma=(0.1, 1)),
             strength: float = 1.0,
             invert_x: bool = False,
             invert_y: bool = False,
@@ -22,8 +22,8 @@ class HeightToNormal(nn.Module):
 
     def get_filter_kernel(self, filter_type): # 2x1x3x3  
         if filter_type == "sobel":
-            sobel_x = torch.tensor([[1.0, 0.0, -1.0], [2.0, 0.0, -2.0], [1.0, 0.0, -1.0]])
-            sobel_y = torch.tensor([[1.0, 2.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -2.0, -1.0]])
+            sobel_x = torch.tensor([[1.0, 0.0, -1.0], [2.0, 0.0, -2.0], [1.0, 0.0, -1.0]]) / 2.0
+            sobel_y = torch.tensor([[1.0, 2.0, 1.0], [0.0, 0.0, 0.0], [-1.0, -2.0, -1.0]]) / 2.0
             return torch.stack([sobel_x, sobel_y]).unsqueeze(1)   
         elif filter_type == "scharr":
             scharr_x = torch.tensor([[47, 0, -47], [162, 0, -162], [47, 0.0, -47]]) / 255.0
@@ -47,7 +47,8 @@ class HeightToNormal(nn.Module):
         x = self.filter(x)
         Gx, Gy = x[:,0], x[:,1]
         return torch.sqrt(Gx**2 + Gy**2)
-    
+
+    # Expecting input height is a tensor in shape [B, C, H, W] and in value range [0, 1]
     def forward(self, height):
         x = self.filter(height)
         dx = -1.0 * x[:, 0] if self.invert_x else x[:, 0]
