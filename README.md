@@ -16,8 +16,27 @@ Please update your environment using the updated `environment.yaml` file.
 - [Demo](demo.ipynb)
 
 ## Results
-| Name   | Height               | Gradient                 |  Normal                       | Substance                  |
-|--------|--------------------  |-----------------------   |-----------------------------|-------------------------     |
+
+<style>
+table th:first-of-type {
+    width: 8%
+}
+table th:nth-of-type(2) {
+    width: 23%
+}
+table th:nth-of-type(3) {
+    width: 23%
+}
+table th:nth-of-type(4) {
+    width: 23%
+}
+table th:nth-of-type(5) {
+    width: 23%
+}
+</style>
+
+| Name   | Height  | Gradient  |  Normal  | Substance |
+|  :---: | :---:   | :---:     | :---:    | :---:     |
 |brick   |![](data/brick.png)   |![](res/brick_grad.png)   | ![](res/brick_normal.png)     | ![](res/brick_normal_sd.png)    |
 |gaussian|![](data/gaussian.png)|![](res/gaussian_grad.png)| ![](res/gaussian_normal.png)  | ![](res/gaussian_normal_sd.png) |
 |polygon |![](data/polygon.png) |![](res/polygon_grad.png) | ![](res/polygon_normal.png)   | ![](res/polygon_normal_sd.png)  |
