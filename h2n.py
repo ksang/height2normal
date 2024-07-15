@@ -40,7 +40,7 @@ class HeightToNormal(nn.Module):
 
     def filter(self, x):
         x = self.pre_process(x)
-        x = torch.nn.functional.conv2d(x, self.filter_kernel, bias=None, stride=1, padding=1, groups=1)   # Bx2xHxW
+        x = torch.nn.functional.conv2d(x, self.filter_kernel.to(x.device), bias=None, stride=1, padding=1, groups=1)   # Bx2xHxW
         return x
     
     def filter_grad(self, x):
