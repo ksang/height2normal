@@ -1,6 +1,7 @@
 from torch import nn
 import torch
 from torchvision.transforms import GaussianBlur
+import torch.nn.functional as F
     
 class HeightToNormal(nn.Module):
     def __init__(
@@ -40,7 +41,9 @@ class HeightToNormal(nn.Module):
 
     def filter(self, x):
         x = self.pre_process(x)
-        x = torch.nn.functional.conv2d(x, self.filter_kernel.to(x.device), bias=None, stride=1, padding=1, groups=1)   # Bx2xHxW
+        # F.conv2d automatic padding by zeros, which will cause abrupt normal change on the edges
+        x = F.pad(x, pad=(1,1,1,1), mode='reflect')
+        x = F.conv2d(x, self.filter_kernel.to(x.device), bias=None, stride=1, padding=0, groups=1)   # Bx2xHxW Bx2xHxW
         return x
     
     def filter_grad(self, x):
