@@ -42,7 +42,8 @@ class HeightToNormal(nn.Module):
     def filter(self, x):
         x = self.pre_process(x)
         # F.conv2d automatic padding by zeros, which will cause abrupt normal change on the edges
-        x = F.pad(x, pad=(1,1,1,1), mode='reflect')
+        # Use circular padding, assuming the height map is tileable in 4 directions.
+        x = F.pad(x, pad=(1,1,1,1), mode='circular')
         x = F.conv2d(x, self.filter_kernel.to(x.device), bias=None, stride=1, padding=0, groups=1)   # Bx2xHxW Bx2xHxW
         return x
     
